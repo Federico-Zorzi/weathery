@@ -1,0 +1,14 @@
+<ul>
+  @for (city of cities; track city.name) {
+    <li>
+      <strong>{{ city.name }}:</strong>
+      @if (weatherResults[city.name]) {
+        {{ getIcon(weatherResults[city.name].weathercode) }}
+        {{ weatherResults[city.name].temperature }}°C -
+        Wind: {{ weatherResults[city.name].windspeed }} km/h
+      } @else {
+        Loading...
+      }
+    </li>
+  }
+</ul>
