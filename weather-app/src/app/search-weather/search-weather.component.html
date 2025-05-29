@@ -5,15 +5,49 @@
 <div>
   <h2>Meteo per {{ forecast.city }}</h2>
 
-<!--
-  @for (data of forecast; track forecast.city){
+  -<div>
+    <h3>Meteo Settimanale</h3>
+    <ul>
+      @for (date of forecast.daily.time; track date; let i = $index) {
+      <li>
+        {{ date }} <br />
+        🌡️ Max: {{ forecast.daily.temperature_2m_max[i] }}°C,
+        Min: {{ forecast.daily.temperature_2m_min[i] }}°C,
+        Stato: {{ forecast.daily.weathercode[i] }}
+      </li>
+      }
+    </ul>
+  </div>
+
   <div>
-    <h3>{{ date }}</h3>
-    <p>
-      🌡️ Max: {{ data.daily.temperature_2m_max[i] }}°C,
-      Min: {{ data.daily.temperature_2m_min[i] }}°C,
-      Stato: {{ getWeatherDescription(data.daily.weathercode[i]) }}
-    </p>
+    <h3>Meteo Giornaliero</h3>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Ora</th>
+        <th>🌡️ Gradi</th>
+        <th>🥵 Percepiti</th>
+        <th>💨 Vento</th>
+        <th>🌧️ Pioggia %</th>
+        <th>☀️ UV</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (hour of forecast.hourly.time; track hour; let i = $index){
+        <tr>
+          <td>{{ forecast.hourly.time[i] }}</td>
+          <td>{{ forecast.hourly.temperature_2m[i] }}°C</td>
+          <td>{{ forecast.hourly.apparent_temperature[i] }}°C</td>
+          <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
+          <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
+          <td>{{ forecast.hourly.uv_index[i] }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+<!--
 
     <table>
       <thead>

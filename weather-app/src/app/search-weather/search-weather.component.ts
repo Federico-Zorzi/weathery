@@ -69,9 +69,9 @@ export class SearchWeatherComponent {
           daily: res.daily,
           hourly: res.hourly
         };
+      console.log('forecast' , this.forecast);
       });
 
-      console.log('forecast' , this.forecast);
 
     } catch (err) {
       console.error('Errore:', err);
