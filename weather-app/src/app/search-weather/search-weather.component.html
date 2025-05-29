@@ -1,0 +1,43 @@
+<input type="text" [(ngModel)]="cityName" placeholder="Cerca una città" />
+<button (click)="searchCity()">Cerca</button>
+
+@if(forecast){
+<div>
+  <h2>Meteo per {{ forecast.city }}</h2>
+
+<!--
+  @for (data of forecast; track forecast.city){
+  <div>
+    <h3>{{ date }}</h3>
+    <p>
+      🌡️ Max: {{ data.daily.temperature_2m_max[i] }}°C,
+      Min: {{ data.daily.temperature_2m_min[i] }}°C,
+      Stato: {{ getWeatherDescription(data.daily.weathercode[i]) }}
+    </p>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Ora</th>
+        <th>🌡️ Gradi</th>
+        <th>🥵 Percepiti</th>
+        <th>💨 Vento</th>
+        <th>🌧️ Pioggia %</th>
+        <th>☀️ UV</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for()
+      <tr *ngFor="let hour of getHoursForDay(date); let j = index">
+        <td>{{ hour.time.split('T')[1] }}</td>
+        <td>{{ hour.temperature }}°C</td>
+        <td>{{ hour.apparent }}°C</td>
+        <td>{{ hour.wind }} km/h</td>
+        <td>{{ hour.precip }}%</td>
+        <td>{{ hour.uv }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>-->
+</div>
+}
