@@ -11,7 +11,7 @@ interface WeatherData {
   selector: 'app-multi-weather',
   imports: [],
   templateUrl: './multi-weather.component.html',
-  styleUrl: './multi-weather.component.css'
+  styleUrl: './multi-weather.component.css',
 })
 export class MultiWeatherComponent {
   weatherCodeIcons: Record<number, string> = {
