@@ -1,77 +1,66 @@
-<input type="text" [(ngModel)]="cityName" placeholder="Cerca una città" />
-<button (click)="searchCity()">Cerca</button>
+<div>
+  <input type="text" class="border-2 border-gray-700 focus:border-orange-600 p-2" [(ngModel)]="cityName"
+         placeholder="Cerca una città..."/>
+  <button (click)="searchCity()">Cerca</button>
+</div>
 
 @if(forecast){
 <div>
-  <h2>Meteo per {{ forecast.city }}</h2>
+  <h2 class="text-2xl">{{ forecast.city }}</h2>
 
-  -<div>
-    <h3>Meteo Settimanale</h3>
-    <ul>
-      @for (date of forecast.daily.time; track date; let i = $index) {
-      <li>
-        {{ date }} <br />
-        🌡️ Max: {{ forecast.daily.temperature_2m_max[i] }}°C,
-        Min: {{ forecast.daily.temperature_2m_min[i] }}°C,
-        Stato: {{ forecast.daily.weathercode[i] }}
-      </li>
-      }
-    </ul>
-  </div>
+  <div class="grid grid-cols-2 gap-2">
 
-  <div>
-    <h3>Meteo Giornaliero</h3>
+    <!--ORARI GIORNALIERI-->
+    <div>
+      <h3 class="text-xl">Meteo Giornaliero</h3>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Ora</th>
-        <th>🌡️ Gradi</th>
-        <th>🥵 Percepiti</th>
-        <th>💨 Vento</th>
-        <th>🌧️ Pioggia %</th>
-        <th>☀️ UV</th>
-      </tr>
-      </thead>
-      <tbody>
-        @for (hour of forecast.hourly.time; track hour; let i = $index){
+      @if(selectedDate){
+      <p>Data selezionata {{ selectedDate }}</p>
+      <table>
+        <thead>
         <tr>
-          <td>{{ forecast.hourly.time[i] }}</td>
-          <td>{{ forecast.hourly.temperature_2m[i] }}°C</td>
-          <td>{{ forecast.hourly.apparent_temperature[i] }}°C</td>
-          <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
-          <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
-          <td>{{ forecast.hourly.uv_index[i] }}</td>
+          <th>Ora</th>
+          <th>🌡️ Gradi</th>
+          <th>🥵 Percepiti</th>
+          <th>💨 Vento</th>
+          <th>🌧️ Pioggia %</th>
+          <th>☀️ UV</th>
         </tr>
+        </thead>
+        <tbody>
+        @for (hour of daySelected.time; track hour; let i = $index) {
+            <tr>
+              <td>{{ convertDateToWeekday(hour) }} - {{ hour.split('T')[1] }}</td>
+              <td>{{ forecast.hourly.temperature_2m[i] }}°C</td>
+              <td>{{ forecast.hourly.apparent_temperature[i] }}°C</td>
+              <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
+              <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
+              <td>{{ forecast.hourly.uv_index[i] }}</td>
+            </tr>
         }
-      </tbody>
-    </table>
-  </div>
-<!--
+        </tbody>
+      </table>
+      } @else {
+        <p>Giorno non selezionato</p>
+      }
+    </div>
 
-    <table>
-      <thead>
-      <tr>
-        <th>Ora</th>
-        <th>🌡️ Gradi</th>
-        <th>🥵 Percepiti</th>
-        <th>💨 Vento</th>
-        <th>🌧️ Pioggia %</th>
-        <th>☀️ UV</th>
-      </tr>
-      </thead>
-      <tbody>
-      @for()
-      <tr *ngFor="let hour of getHoursForDay(date); let j = index">
-        <td>{{ hour.time.split('T')[1] }}</td>
-        <td>{{ hour.temperature }}°C</td>
-        <td>{{ hour.apparent }}°C</td>
-        <td>{{ hour.wind }} km/h</td>
-        <td>{{ hour.precip }}%</td>
-        <td>{{ hour.uv }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>-->
+    <!-- GIORNI DELLA SETTIMANA -->
+    <div>
+      <h3 class="text-xl">Meteo Settimanale</h3>
+
+      <ul>
+        @for (date of forecast.daily.time; track date; let i = $index) {
+        <li (click)="selectDate(date)"
+            class="cursor-pointer hover:text-orange-600">
+          {{ convertDateToWeekday(date) }}<br />
+          🌡️ Max: {{ forecast.daily.temperature_2m_max[i] }}°C,
+          Min: {{ forecast.daily.temperature_2m_min[i] }}°C,
+          Stato: {{ forecast.daily.weathercode[i] }}
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
 </div>
 }
