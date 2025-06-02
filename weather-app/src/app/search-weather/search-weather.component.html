@@ -25,6 +25,7 @@
           <th>💨 Vento</th>
           <th>🌧️ Pioggia %</th>
           <th>☀️ UV</th>
+          <th>☀️ Codice Meteo</th>
         </tr>
         </thead>
         <tbody>
@@ -36,6 +37,7 @@
               <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
               <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
               <td>{{ forecast.hourly.uv_index[i] }}</td>
+              <td>{{ getIcon(forecast.hourly.weathercode[i]) }}</td>
             </tr>
         }
         </tbody>
@@ -56,7 +58,7 @@
           {{ convertDateToWeekday(date) }}<br />
           🌡️ Max: {{ forecast.daily.temperature_2m_max[i] }}°C,
           Min: {{ forecast.daily.temperature_2m_min[i] }}°C,
-          Stato: {{ forecast.daily.weathercode[i] }}
+          Stato: {{ getIcon(forecast.daily.weathercode[i]) }}
         </li>
         }
       </ul>

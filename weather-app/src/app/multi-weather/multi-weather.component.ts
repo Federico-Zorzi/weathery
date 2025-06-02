@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from '../utils/utils.service';
 
 interface WeatherData {
   temperature: number;
@@ -9,27 +10,10 @@ interface WeatherData {
 
 @Component({
   selector: 'app-multi-weather',
-  imports: [],
   templateUrl: './multi-weather.component.html',
   styleUrl: './multi-weather.component.css',
 })
 export class MultiWeatherComponent {
-  weatherCodeIcons: Record<number, string> = {
-    0: '☀️', // Clear sky
-    1: '🌤️', 2: '⛅', 3: '☁️', // Cloudy
-    45: '🌫️', 48: '🌫️', // Fog
-    51: '🌦️', 53: '🌧️', 55: '🌧️', // Drizzle
-    56: '🌧️❄️', 57: '🌧️❄️', // Freezing drizzle
-    61: '🌧️', 63: '🌧️', 65: '🌧️', // Rain
-    66: '🌧️❄️', 67: '🌧️❄️', // Freezing rain
-    71: '🌨️', 73: '🌨️', 75: '❄️', // Snow
-    77: '🌨️', // Snow grains
-    80: '🌦️', 81: '🌧️', 82: '🌩️', // Rain showers
-    85: '🌨️', 86: '❄️', // Snow showers
-    95: '🌩️', // Thunderstorm
-    96: '⛈️', 99: '⛈️' // Thunderstorm with hail
-  };
-
   cities = [
     { name: 'Torino', lat: 45.0703, lon: 7.6869 },
     { name: 'Roma', lat: 41.9028, lon: 12.4964 },
@@ -41,7 +25,10 @@ export class MultiWeatherComponent {
   weatherResults: Record<string, WeatherData> = {};
   isLoading = true;
 
-  constructor(private http: HttpClient) {}
+constructor(
+  private http: HttpClient,
+  private utils: UtilsService
+) {}
 
   ngOnInit(): void {
     this.cities.forEach(city => {
@@ -81,14 +68,10 @@ export class MultiWeatherComponent {
         });
       }
     });
-
     this.isLoading = false;
   }
 
-  getIcon(code: number | string): string {
-    const numericCode = typeof code === 'string' ? parseInt(code, 10) : code;
-    const icon = this.weatherCodeIcons[numericCode];
-    return icon ?? '❓';
+  getIcon(code: number | string){
+   return this.utils.getIcon(code)
   }
-
 }

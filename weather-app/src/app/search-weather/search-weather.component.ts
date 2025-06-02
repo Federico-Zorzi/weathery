@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from '../utils/utils.service';
 
 interface GeoResponse {
   results: {
@@ -57,7 +58,8 @@ export class SearchWeatherComponent {
     uv_index: []
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private utils: UtilsService) {}
 
   async searchCity() {
     if (!this.cityName) return;
@@ -116,5 +118,9 @@ export class SearchWeatherComponent {
         };
         // console.log('daySelected', this.daySelected);
       }
+  }
+
+  getIcon(code: number | string){
+   return this.utils.getIcon(code)
   }
 }
