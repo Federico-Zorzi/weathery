@@ -5,64 +5,76 @@
 </div>
 
 @if(forecast){
-<div>
-  <h2 class="text-2xl">{{ forecast.city }}</h2>
+<h2 class="text-3xl">{{ forecast.city }}</h2>
 
-  <div class="grid grid-cols-2 gap-2">
-
-    <!--ORARI GIORNALIERI-->
-    <div>
-      <h3 class="text-xl">Meteo Giornaliero</h3>
-
-      @if(selectedDate){
-      <p>Data selezionata {{ selectedDate }}</p>
-      <table>
-        <thead>
-        <tr>
-          <th>Ora</th>
-          <th>🌡️ Gradi</th>
-          <th>🥵 Percepiti</th>
-          <th>💨 Vento</th>
-          <th>🌧️ Pioggia %</th>
-          <th>☀️ UV</th>
-          <th>☀️ Codice Meteo</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (hour of daySelected.time; track hour; let i = $index) {
-            <tr>
-              <td>{{ convertDateToWeekday(hour) }} - {{ hour.split('T')[1] }}</td>
-              <td>{{ forecast.hourly.temperature_2m[i] }}°C</td>
-              <td>{{ forecast.hourly.apparent_temperature[i] }}°C</td>
-              <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
-              <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
-              <td>{{ forecast.hourly.uv_index[i] }}</td>
-              <td>{{ getIcon(forecast.hourly.weathercode[i]) }}</td>
-            </tr>
+<div class="h-160">
+  <div class="flex justify-between flex-auto gap-2 max-h-full">
+    @if(selectedDate){
+    <div class="w-3/4 flex flex-col overflow-x-scroll">
+      <div class="h-4/5">
+        <h3 class="text-2xl">
+          {{ convertDateToWeekday(selectedDate) }}
+        </h3>
+      </div>
+      <div class="h-1/5 flex gap-2">
+        @for (hour of daySelected.time; track i; let i = $index) {
+        <div (click)="selectHour(hour)" class="flex flex-col justify-center items-center cursor-pointer min-w-30 p-2 bg-orange-100">
+          <p>{{ daySelected.apparent_temperature[i] }} °C</p>
+          <span class="text-[40px]">
+            {{ getIcon(daySelected.weathercode[i]) }}
+          </span>
+          <p>{{ hour.split('T')[1] }}</p>
+        </div>
+        <!--<table>
+          <thead>
+          <tr>
+            <th>Ora</th>
+            <th>🌡️ Gradi</th>
+            <th>🥵 Percepiti</th>
+            <th>💨 Vento</th>
+            <th>🌧️ Pioggia %</th>
+            <th>☀️ UV</th>
+            <th>☀️ Codice Meteo</th>
+          </tr>
+          </thead>
+          <tbody>
+          @for (hour of daySelected.time; track hour; let i = $index) {
+          <tr>
+            <td>{{ convertDateToWeekday(hour) }} - {{ hour.split('T')[1] }}</td>
+            <td>{{ forecast.hourly.temperature_2m[i] }}°C</td>
+            <td>{{ forecast.hourly.apparent_temperature[i] }}°C</td>
+            <td>{{ forecast.hourly.windspeed_10m[i] }} km/h</td>
+            <td>{{ forecast.hourly.precipitation_probability[i] }} %</td>
+            <td>{{ forecast.hourly.uv_index[i] }}</td>
+            <td>{{ getIcon(forecast.hourly.weathercode[i]) }}</td>
+          </tr>
+          }
+          </tbody>
+        </table>-->
         }
-        </tbody>
-      </table>
-      } @else {
-        <p>Giorno non selezionato</p>
-      }
+      </div>
     </div>
 
-    <!-- GIORNI DELLA SETTIMANA -->
-    <div>
-      <h3 class="text-xl">Meteo Settimanale</h3>
-
-      <ul>
+    } @else {
+    <div class="flex justify-center items-center w-3/4">
+      <p class="text-2xl text-gray-400">Giorno non selezionato</p>
+    </div>
+    }
+    <div class="w-1/4 overflow-y-scroll">
+      <div class="flex flex-col gap-2 max-h-full">
         @for (date of forecast.daily.time; track date; let i = $index) {
-        <li (click)="selectDate(date)"
-            class="cursor-pointer hover:text-orange-600">
-          {{ convertDateToWeekday(date) }}<br />
-          🌡️ Max: {{ forecast.daily.temperature_2m_max[i] }}°C,
-          Min: {{ forecast.daily.temperature_2m_min[i] }}°C,
-          Stato: {{ getIcon(forecast.daily.weathercode[i]) }}
-        </li>
+        <div (click)="selectDate(date)" class="cursor-pointer text-center bg-sky-100 p-4">
+          <h3 class="day-name text-2xl">{{ convertDateToWeekday(date) }}</h3>
+          <span class="text-[40px]">{{ getIcon(forecast.daily.weathercode[i]) }}</span>
+          <p>🌡️ {{ forecast.daily.temperature_2m_min[i] }} - {{ forecast.daily.temperature_2m_max[i] }} °C</p>
+        </div>
         }
-      </ul>
+      </div>
     </div>
   </div>
+</div>
+} @else {
+<div class="flex justify-center items-center h-160">
+  <p class="text-2xl text-gray-400">Seleziona una località...</p>
 </div>
 }

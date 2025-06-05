@@ -42,21 +42,34 @@ export class SearchWeatherComponent {
   cityName = '';
   forecast: ForecastData | null = null;
   selectedDate: string | null = null;
+  selectedHour: string | null = null;
+
   daySelected: {
     time: string[];
-    temperature_2m: number[];
+    weathercode: number[];
     apparent_temperature: number[];
-    windspeed_10m: number[];
-    precipitation_probability: number[];
-    uv_index: number[];
   } = {
     time: [],
-    temperature_2m: [],
+    weathercode: [],
     apparent_temperature: [],
-    windspeed_10m: [],
-    precipitation_probability: [],
-    uv_index: []
   };
+
+  hourSelected: {
+    time: string;
+    temperature_2m: number;
+    apparent_temperature: number;
+    windspeed_10m: number;
+    precipitation_probability: number;
+    uv_index: number;
+    } = {
+    time: "",
+    temperature_2m: 0,
+    apparent_temperature:  0,
+    windspeed_10m: 0,
+    precipitation_probability: 0,
+    uv_index: 0
+  };
+
 
   constructor(private http: HttpClient,
               private utils: UtilsService) {}
@@ -110,14 +123,31 @@ export class SearchWeatherComponent {
 
         this.daySelected = {
           time: indexes.map(i => hourly.time[i]),
-          temperature_2m: indexes.map(i => hourly.temperature_2m[i]),
+          weathercode: indexes.map(i => hourly.weathercode[i]),
           apparent_temperature: indexes.map(i => hourly.apparent_temperature[i]),
-          windspeed_10m: indexes.map(i => hourly.windspeed_10m[i]),
-          precipitation_probability: indexes.map(i => hourly.precipitation_probability[i]),
-          uv_index: indexes.map(i => hourly.uv_index[i]),
         };
-        // console.log('daySelected', this.daySelected);
+        console.log('daySelected', this.daySelected);
       }
+  }
+
+  selectHour(hour: string) {
+    this.selectedHour = hour;
+
+    if(this.selectedHour && this.forecast?.hourly){
+      const hourIndex = this.forecast.hourly.time.findIndex(h => h == hour);
+
+      this.hourSelected = {
+          time: this.forecast.hourly.time[hourIndex],
+          temperature_2m: this.forecast.hourly.temperature_2m[hourIndex],
+          apparent_temperature: this.forecast.hourly.apparent_temperature[hourIndex],
+          windspeed_10m: this.forecast.hourly.windspeed_10m[hourIndex],
+          precipitation_probability: this.forecast.hourly.precipitation_probability[hourIndex],
+          uv_index: this.forecast.hourly.uv_index[hourIndex],
+        };
+        console.log('hourSelected', this.hourSelected);
+
+    }
+
   }
 
   getIcon(code: number | string){
